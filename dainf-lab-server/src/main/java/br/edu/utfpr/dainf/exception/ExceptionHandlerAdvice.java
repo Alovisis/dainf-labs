@@ -57,6 +57,14 @@ public class ExceptionHandlerAdvice {
         return new WarnMessage(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), request.getServletPath(), errors);
     }
 
+    @ExceptionHandler({ItemDeletionNotAllowedException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public WarnMessage handlerItemDeletionNotAllowedException(ItemDeletionNotAllowedException exception, HttpServletRequest request) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", exception.getMessage());
+        return new WarnMessage(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), request.getServletPath(), errors);
+    }
+
     @ExceptionHandler({ServletRequestBindingException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public WarnMessage handlerServletRequestBindingException(ServletRequestBindingException exception, HttpServletRequest request) {
