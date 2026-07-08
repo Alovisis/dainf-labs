@@ -90,6 +90,14 @@ public class LeakageService extends CrudService<Long, Leakage, LeakageRepository
                         }
                     }
                     itemService.save(i);
+
+                    // The Asset(s) consumed above may have just been physically deleted
+                    // (Item.assets has orphanRemoval = true), so LeakageItem must not keep
+                    // a FK reference to it or the insert below will violate the
+                    // asset_id foreign key constraint ("Erro na integridade dos dados").
+                    if (br.edu.utfpr.dainf.enums.ItemType.DURABLE.equals(i.getType())) {
+                        item.setAsset(null);
+                    }
                 }
             }
         }
